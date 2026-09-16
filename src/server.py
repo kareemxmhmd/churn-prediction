@@ -11,8 +11,19 @@ MODEL_PATH = BASE_DIR / "models" / "churn_model.pkl"
 COLUMNS_PATH = BASE_DIR / "models" / "feature_columns.pkl"
 METRICS_PATH = BASE_DIR / "models" / "metrics.pkl"
 
+from fastapi.middleware.cors import CORSMiddleware
+import os
+import uvicorn
+
 app = FastAPI(title="Churn Prediction API")
 
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 model = joblib.load(MODEL_PATH)
 feature_columns = joblib.load(COLUMNS_PATH)
 metrics = joblib.load(METRICS_PATH)
@@ -85,3 +96,8 @@ def predict(customer: Customer):
         "churn_prediction": prediction,
         "risk_tier": risk_tier,
     }
+
+if __name__ == "__main__":
+    port = int(os.environ.get("PORT", 8000))
+    # If run via `python src/server.py`, the module name is just `server`
+    uvicorn.run("server:app", host="0.0.0.0", port=port)
