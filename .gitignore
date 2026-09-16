@@ -46,5 +46,4 @@ out/
 Thumbs.db
 
 # Data / Models
-*.pkl
 *.csv
