@@ -45,3 +45,6 @@ out/
 .DS_Store
 Thumbs.db
 
+# Data / Models
+*.pkl
+*.csv
