@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 
 export default function Home() {
   const [status, setStatus] = useState("Checking backend...");
@@ -8,6 +8,27 @@ export default function Home() {
   const [prediction, setPrediction] = useState<any>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+
+  const resultsRef = useRef<HTMLDivElement>(null);
+  const errorRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (prediction) {
+      const timer = setTimeout(() => {
+        resultsRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+      }, 50);
+      return () => clearTimeout(timer);
+    }
+  }, [prediction]);
+
+  useEffect(() => {
+    if (error) {
+      const timer = setTimeout(() => {
+        errorRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+      }, 50);
+      return () => clearTimeout(timer);
+    }
+  }, [error]);
 
   const rawUrl = process.env.NEXT_PUBLIC_API_URL || "https://web-production-98eb2.up.railway.app";
   const apiUrl = rawUrl.includes("84f12")
@@ -274,7 +295,10 @@ export default function Home() {
         </form>
 
         {error && (
-          <div className="rounded-lg bg-red-50 p-4 border border-red-200 mt-6">
+          <div
+            ref={errorRef}
+            className="rounded-lg bg-red-50 p-4 border border-red-200 mt-6 scroll-mt-8"
+          >
             <div className="flex">
               <div className="flex-shrink-0">
                 <svg className="h-5 w-5 text-red-400" viewBox="0 0 20 20" fill="currentColor">
@@ -290,7 +314,10 @@ export default function Home() {
         )}
 
         {prediction && (
-          <div className="mt-8 rounded-2xl bg-white border border-gray-200 shadow-lg overflow-hidden animate-in fade-in slide-in-from-bottom-4 duration-500">
+          <div
+            ref={resultsRef}
+            className="mt-8 rounded-2xl bg-white border border-gray-200 shadow-lg overflow-hidden animate-in fade-in slide-in-from-bottom-4 duration-500 scroll-mt-8"
+          >
             <div className="px-6 py-5 border-b border-gray-100 bg-gray-50/50 flex justify-between items-center">
               <h3 className="text-lg font-semibold text-gray-900">Analysis Results</h3>
               <span className={`px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider ${prediction.churn_prediction ? 'bg-red-100 text-red-700' : 'bg-green-100 text-green-700'}`}>
