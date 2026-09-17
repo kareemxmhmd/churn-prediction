@@ -21,10 +21,14 @@ app = FastAPI(title="Churn Prediction API")
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
-    allow_credentials=True,
+    allow_credentials=False,
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+@app.get("/")
+def root():
+    return {"status": "ok", "message": "Churn Prediction API is running", "docs": "/docs"}
 model = None
 metrics = None
 load_error = None

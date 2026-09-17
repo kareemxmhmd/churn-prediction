@@ -9,12 +9,24 @@ export default function Home() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  const apiUrl = process.env.NEXT_PUBLIC_API_URL || "https://web-production-98eb2.up.railway.app";
+  const rawUrl = process.env.NEXT_PUBLIC_API_URL || "https://web-production-98eb2.up.railway.app";
+  const apiUrl = rawUrl.includes("84f12")
+    ? "https://web-production-98eb2.up.railway.app"
+    : rawUrl.replace(/\/$/, "");
 
   useEffect(() => {
     fetch(`${apiUrl}/health`)
-      .then((res) => (res.ok ? setStatus("Online") : setStatus("Error")))
-      .catch(() => setStatus("Offline"));
+      .then((res) => {
+        if (res.ok) {
+          setStatus("Online");
+        } else {
+          setStatus("Error");
+        }
+      })
+      .catch((err) => {
+        console.error("Health check error:", err);
+        setStatus("Offline");
+      });
 
     fetch(`${apiUrl}/model/metadata`)
       .then((res) => res.json())
