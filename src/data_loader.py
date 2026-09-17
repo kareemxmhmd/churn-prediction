@@ -13,4 +13,5 @@ def main():
     print(f"Loaded {df.shape[0]} rows and {df.shape[1]} columns.")
     print(df["Churn"].value_counts())
 
-main()
+if __name__ == "__main__":
+    main()
