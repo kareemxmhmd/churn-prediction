@@ -1,14 +1,16 @@
+import sys
 from pathlib import Path
+BASE_DIR = Path(__file__).resolve().parent.parent
+sys.path.append(str(BASE_DIR))
+
 import joblib
 import pandas as pd
 from fastapi import FastAPI
 from pydantic import BaseModel
 
-from build_features import TARGET_COL
+from src.build_features import TARGET_COL
 
-BASE_DIR = Path(__file__).resolve().parent.parent
 MODEL_PATH = BASE_DIR / "models" / "churn_model.pkl"
-COLUMNS_PATH = BASE_DIR / "models" / "feature_columns.pkl"
 METRICS_PATH = BASE_DIR / "models" / "metrics.pkl"
 
 from fastapi.middleware.cors import CORSMiddleware
@@ -25,7 +27,6 @@ app.add_middleware(
     allow_headers=["*"],
 )
 model = joblib.load(MODEL_PATH)
-feature_columns = joblib.load(COLUMNS_PATH)
 metrics = joblib.load(METRICS_PATH)
 
 
@@ -51,20 +52,7 @@ class Customer(BaseModel):
 
 
 def prepare_input(customer: Customer):
-    df = pd.DataFrame([customer.model_dump()])
-
-    categorical_cols = df.select_dtypes(include="object").columns.tolist()
-    df = pd.get_dummies(df, columns=categorical_cols)
-
-    # add any missing columns from training (one-hot categories not present in this input)
-    for col in feature_columns:
-        if col not in df.columns:
-            df[col] = 0
-
-    # keep only columns the model was trained on, in the same order
-    df = df[feature_columns]
-
-    return df
+    return pd.DataFrame([customer.model_dump()])
 
 
 @app.get("/health")
@@ -99,5 +87,4 @@ def predict(customer: Customer):
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 8000))
-    # If run via `python src/server.py`, the module name is just `server`
-    uvicorn.run("server:app", host="0.0.0.0", port=port)
+    uvicorn.run("src.server:app", host="0.0.0.0", port=port)
