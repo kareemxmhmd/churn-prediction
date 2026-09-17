@@ -4,7 +4,6 @@ import { useState, useEffect, useRef } from "react";
 
 export default function Home() {
   const [status, setStatus] = useState("Checking backend...");
-  const [metrics, setMetrics] = useState<any>(null);
   const [prediction, setPrediction] = useState<any>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -48,11 +47,6 @@ export default function Home() {
         console.error("Health check error:", err);
         setStatus("Offline");
       });
-
-    fetch(`${apiUrl}/model/metadata`)
-      .then((res) => res.json())
-      .then((data) => setMetrics(data))
-      .catch(() => {});
   }, [apiUrl]);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -114,19 +108,11 @@ export default function Home() {
               Fill out the customer profile below to predict their likelihood of churning. Our machine learning model analyzes behavioral and demographic data in real-time.
             </p>
           </div>
-          <div className="flex flex-col gap-2">
+          <div>
             <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white border border-gray-200 shadow-sm text-sm font-medium text-gray-700 w-fit">
               <span className={`w-2.5 h-2.5 rounded-full ${status === 'Online' ? 'bg-green-500' : 'bg-red-500 animate-pulse'}`}></span>
               API: {status}
             </div>
-            {metrics && (
-              <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white border border-gray-200 shadow-sm text-xs font-medium text-gray-600 w-fit">
-                <svg className="w-4 h-4 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" />
-                </svg>
-                {metrics.model_name} • {(metrics.accuracy * 100).toFixed(1)}% Acc
-              </div>
-            )}
           </div>
         </header>
 
