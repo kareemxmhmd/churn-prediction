@@ -8,7 +8,6 @@ import pandas as pd
 from fastapi import FastAPI
 from pydantic import BaseModel
 
-from src.build_features import TARGET_COL
 
 MODEL_PATH = BASE_DIR / "models" / "churn_model.pkl"
 METRICS_PATH = BASE_DIR / "models" / "metrics.pkl"
@@ -87,4 +86,4 @@ def predict(customer: Customer):
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 8000))
-    uvicorn.run("src.server:app", host="0.0.0.0", port=port)
+    uvicorn.run(app, host="0.0.0.0", port=port)
