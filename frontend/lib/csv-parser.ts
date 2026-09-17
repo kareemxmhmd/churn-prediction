@@ -290,46 +290,52 @@ export function exportToCSV(
   URL.revokeObjectURL(url);
 }
 
+export const SAMPLE_CSV_CONTENT = `CustomerID,Tenure,PreferredLoginDevice,CityTier,WarehouseToHome,PreferredPaymentMode,Gender,HourSpendOnApp,NumberOfDeviceRegistered,PreferedOrderCat,SatisfactionScore,MaritalStatus,NumberOfAddress,Complain,OrderAmountHikeFromlastYear,CouponUsed,OrderCount,DaySinceLastOrder,CashbackAmount
+50001,4.0,Mobile Phone,3,6.0,Debit Card,Female,3.0,3,Laptop & Accessory,2,Single,9,1,11.0,1.0,1.0,5.0,159.93
+50002,1.0,Phone,1,8.0,UPI,Male,3.0,4,Mobile,3,Single,7,1,15.0,0.0,1.0,0.0,120.90
+50003,14.0,Phone,1,30.0,Debit Card,Male,2.0,4,Mobile,3,Single,6,0,14.0,0.0,1.0,3.0,120.28
+50004,0.0,Phone,3,15.0,Debit Card,Male,2.0,4,Laptop & Accessory,5,Single,8,0,23.0,0.0,1.0,3.0,134.07
+50005,0.0,Phone,1,12.0,CC,Male,2.0,3,Mobile,5,Single,3,0,11.0,1.0,1.0,3.0,129.60
+50006,0.0,Computer,1,22.0,Debit Card,Female,3.0,5,Mobile Phone,5,Single,2,1,22.0,4.0,6.0,7.0,139.19
+50007,8.0,Phone,3,11.0,Cash on Delivery,Male,2.0,3,Laptop & Accessory,2,Divorced,4,0,14.0,0.0,1.0,0.0,120.86
+50008,5.0,Phone,1,6.0,CC,Male,3.0,3,Mobile,2,Divorced,3,1,16.0,2.0,2.0,0.0,122.93
+50009,13.0,Phone,3,9.0,E wallet,Male,2.0,4,Mobile,3,Divorced,2,1,14.0,0.0,1.0,2.0,126.83
+50010,2.0,Phone,1,31.0,Debit Card,Male,2.0,5,Mobile,3,Single,2,0,12.0,1.0,1.0,1.0,122.93
+50011,4.0,Mobile Phone,1,18.0,Cash on Delivery,Female,2.0,3,Others,3,Divorced,2,0,15.0,9.0,15.0,8.0,295.45
+50012,11.0,Mobile Phone,1,6.0,Debit Card,Male,3.0,4,Fashion,3,Single,10,1,13.0,0.0,1.0,0.0,153.81
+50013,0.0,Phone,1,11.0,COD,Male,2.0,3,Mobile,3,Single,2,1,13.0,2.0,2.0,2.0,134.41
+50014,0.0,Phone,1,15.0,CC,Male,3.0,4,Mobile,3,Divorced,1,1,17.0,0.0,1.0,0.0,133.88
+50015,9.0,Mobile Phone,3,15.0,Credit Card,Male,3.0,4,Fashion,2,Single,2,0,16.0,0.0,4.0,7.0,196.19
+50016,1.0,Phone,2,12.0,UPI,Male,3.0,3,Mobile,5,Married,5,1,22.0,1.0,1.0,2.0,120.73
+50017,0.0,Computer,1,12.0,Debit Card,Female,2.0,4,Mobile,2,Single,2,1,18.0,1.0,1.0,0.0,129.26
+50018,0.0,Mobile Phone,3,11.0,E wallet,Male,2.0,4,Laptop & Accessory,3,Single,2,1,11.0,1.0,1.0,3.0,157.44
+50019,0.0,Computer,1,13.0,Debit Card,Male,3.0,5,Laptop & Accessory,3,Single,2,1,24.0,1.0,1.0,6.0,160.74
+50020,19.0,Mobile Phone,1,20.0,Debit Card,Female,3.0,3,Mobile Phone,4,Divorced,10,1,18.0,1.0,4.0,3.0,149.63
+50021,28.0,Mobile Phone,1,7.0,Credit Card,Female,4.0,3,Fashion,5,Married,2,0,19.0,5.0,8.0,10.0,230.50
+50022,22.0,Computer,1,9.0,Credit Card,Male,3.0,3,Grocery,4,Married,3,0,14.0,4.0,6.0,5.0,190.20
+50023,31.0,Computer,2,8.0,Debit Card,Female,4.0,2,Laptop & Accessory,5,Married,2,0,16.0,6.0,12.0,14.0,265.80
+50024,18.0,Mobile Phone,1,10.0,Credit Card,Male,3.0,4,Fashion,4,Married,3,0,13.0,3.0,5.0,7.0,185.00
+50025,25.0,Mobile Phone,1,6.0,UPI,Female,3.0,3,Grocery,5,Married,4,0,15.0,4.0,7.0,6.0,210.15`;
+
 /**
- * Generate a ready-to-use sample CSV template string
+ * Generate sample CSV string
  */
 export function generateSampleCSV(): string {
-  const sampleHeaders = [
-    "CustomerID",
-    "Tenure",
-    "PreferredLoginDevice",
-    "CityTier",
-    "WarehouseToHome",
-    "PreferredPaymentMode",
-    "Gender",
-    "HourSpendOnApp",
-    "NumberOfDeviceRegistered",
-    "PreferedOrderCat",
-    "SatisfactionScore",
-    "MaritalStatus",
-    "NumberOfAddress",
-    "Complain",
-    "OrderAmountHikeFromlastYear",
-    "CouponUsed",
-    "OrderCount",
-    "DaySinceLastOrder",
-    "CashbackAmount",
-  ];
+  return SAMPLE_CSV_CONTENT;
+}
 
-  const sampleRows = [
-    [50001, 4, "Mobile Phone", 3, 6, "Debit Card", "Female", 3, 3, "Laptop & Accessory", 2, "Single", 9, 1, 11, 1, 1, 5, 159.93],
-    [50002, 1, "Mobile Phone", 1, 8, "UPI", "Male", 3, 4, "Mobile", 3, "Single", 7, 1, 15, 0, 1, 0, 120.90],
-    [50003, 14, "Computer", 1, 30, "Debit Card", "Male", 2, 4, "Mobile", 3, "Single", 6, 0, 14, 0, 1, 3, 120.28],
-    [50004, 0, "Mobile Phone", 3, 15, "Debit Card", "Male", 2, 4, "Laptop & Accessory", 5, "Single", 8, 0, 23, 0, 1, 3, 134.07],
-    [50005, 25, "Computer", 1, 10, "Credit Card", "Female", 4, 3, "Fashion", 4, "Married", 3, 0, 18, 3, 6, 8, 185.50],
-    [50006, 2, "Mobile Phone", 2, 22, "E wallet", "Male", 2, 2, "Grocery", 1, "Divorced", 4, 1, 12, 1, 2, 1, 115.00],
-    [50007, 18, "Mobile Phone", 1, 7, "Credit Card", "Male", 3, 5, "Laptop & Accessory", 4, "Married", 5, 0, 20, 2, 4, 12, 210.40],
-  ];
-
-  const csvLines = [
-    sampleHeaders.join(","),
-    ...sampleRows.map((row) => row.join(",")),
-  ];
-
-  return csvLines.join("\n");
+/**
+ * Downloads the sample data.csv directly in browser via client-side Blob
+ * Zero network dependencies - 100% reliable on any host (Vercel, local, offline)
+ */
+export function downloadSampleCSV(fileName = "data.csv") {
+  const blob = new Blob([SAMPLE_CSV_CONTENT], { type: "text/csv;charset=utf-8;" });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+  link.href = url;
+  link.setAttribute("download", fileName);
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+  URL.revokeObjectURL(url);
 }

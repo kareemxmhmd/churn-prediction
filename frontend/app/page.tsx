@@ -2,7 +2,8 @@
 
 import { useState, useEffect, useRef } from "react";
 import BatchPrediction from "@/components/BatchPrediction";
-import { User, FileSpreadsheet } from "lucide-react";
+import { User, FileSpreadsheet, Download } from "lucide-react";
+import { downloadSampleCSV } from "@/lib/csv-parser";
 
 export default function Home() {
   const [activeTab, setActiveTab] = useState<"single" | "batch">("single");
@@ -113,10 +114,25 @@ export default function Home() {
                 : "Upload customer CSV data to predict churn probabilities in bulk, filter by risk tier, and export prediction reports."}
             </p>
           </div>
-          <div>
+          <div className="flex flex-col items-start sm:items-end gap-2">
             <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white border border-gray-200 shadow-sm text-sm font-medium text-gray-700 w-fit">
               <span className={`w-2.5 h-2.5 rounded-full ${status === 'Online' ? 'bg-green-500' : 'bg-red-500 animate-pulse'}`}></span>
               API: {status}
+            </div>
+
+            {/* Test CSV Download Button with Explanation */}
+            <div className="flex flex-col items-start sm:items-end mt-0.5">
+              <button
+                type="button"
+                onClick={() => downloadSampleCSV("data.csv")}
+                className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-lg bg-blue-50 hover:bg-blue-100 border border-blue-200 text-blue-700 text-xs font-semibold shadow-xs transition-colors cursor-pointer"
+              >
+                <Download className="w-3.5 h-3.5 text-blue-600" />
+                Download Test CSV (data.csv)
+              </button>
+              <span className="text-[11px] text-gray-500 mt-1 max-w-[240px] text-left sm:text-right leading-tight">
+                Pre-configured test dataset with 25 customer records to test Batch CSV Prediction.
+              </span>
             </div>
           </div>
         </header>

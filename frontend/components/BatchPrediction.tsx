@@ -22,6 +22,8 @@ import {
   parseCSV,
   mapRowToCustomer,
   exportToCSV,
+  SAMPLE_CSV_CONTENT,
+  downloadSampleCSV,
   BatchItem,
   PredictionResult,
 } from "@/lib/csv-parser";
@@ -105,7 +107,7 @@ export default function BatchPrediction({ apiUrl }: BatchPredictionProps) {
     if (fileInputRef.current) fileInputRef.current.value = "";
   };
 
-  const handleLoadSampleData = async (e: React.MouseEvent) => {
+  const handleLoadSampleData = (e: React.MouseEvent) => {
     e.stopPropagation();
     setError("");
     setIsParsing(true);
@@ -113,14 +115,11 @@ export default function BatchPrediction({ apiUrl }: BatchPredictionProps) {
     setCurrentPage(1);
 
     try {
-      const res = await fetch("/data.csv");
-      if (!res.ok) throw new Error("Could not load sample data.csv");
-      const text = await res.text();
-      const { rows } = parseCSV(text);
+      const { rows } = parseCSV(SAMPLE_CSV_CONTENT);
       if (rows.length === 0) throw new Error("Sample file is empty");
 
       const mappedItems = rows.map((row, idx) => mapRowToCustomer(row, idx));
-      setFile(new File([text], "data.csv", { type: "text/csv" }));
+      setFile(new File([SAMPLE_CSV_CONTENT], "data.csv", { type: "text/csv" }));
       setItems(mappedItems);
     } catch (err: any) {
       setError(`Failed to load sample data: ${err.message}`);
@@ -131,12 +130,7 @@ export default function BatchPrediction({ apiUrl }: BatchPredictionProps) {
 
   const handleDownloadSampleFile = (e: React.MouseEvent) => {
     e.stopPropagation();
-    const link = document.createElement("a");
-    link.href = "/data.csv";
-    link.download = "data.csv";
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+    downloadSampleCSV("data.csv");
   };
 
   const runBatchPredictions = async () => {
