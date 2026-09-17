@@ -43,25 +43,27 @@ except Exception as e:
     print("ERROR loading model/metrics:\n", load_error, flush=True)
 
 
+from typing import List, Optional
+
 class Customer(BaseModel):
-    Tenure: float
-    PreferredLoginDevice: str
-    CityTier: int
-    WarehouseToHome: float
-    PreferredPaymentMode: str
-    Gender: str
-    HourSpendOnApp: float
-    NumberOfDeviceRegistered: int
-    PreferedOrderCat: str
-    SatisfactionScore: int
-    MaritalStatus: str
-    NumberOfAddress: int
-    Complain: int
-    OrderAmountHikeFromlastYear: float
-    CouponUsed: float
-    OrderCount: float
-    DaySinceLastOrder: float
-    CashbackAmount: float
+    Tenure: Optional[float] = 12.0
+    PreferredLoginDevice: Optional[str] = "Mobile Phone"
+    CityTier: Optional[int] = 1
+    WarehouseToHome: Optional[float] = 10.0
+    PreferredPaymentMode: Optional[str] = "Debit Card"
+    Gender: Optional[str] = "Male"
+    HourSpendOnApp: Optional[float] = 2.0
+    NumberOfDeviceRegistered: Optional[int] = 1
+    PreferedOrderCat: Optional[str] = "Mobile"
+    SatisfactionScore: Optional[int] = 3
+    MaritalStatus: Optional[str] = "Single"
+    NumberOfAddress: Optional[int] = 1
+    Complain: Optional[int] = 0
+    OrderAmountHikeFromlastYear: Optional[float] = 10.0
+    CouponUsed: Optional[float] = 1.0
+    OrderCount: Optional[float] = 1.0
+    DaySinceLastOrder: Optional[float] = 5.0
+    CashbackAmount: Optional[float] = 50.0
 
 
 def prepare_input(customer: Customer):
@@ -103,6 +105,50 @@ def predict(customer: Customer):
         "churn_probability": round(float(probability), 4),
         "churn_prediction": prediction,
         "risk_tier": risk_tier,
+    }
+
+
+@app.post("/predict-batch")
+def predict_batch(customers: List[Customer]):
+    if model is None:
+        return {"error": "Model not loaded", "detail": load_error}
+
+    if not customers:
+        return {"total": 0, "results": []}
+
+    records = [c.model_dump() for c in customers]
+    X = pd.DataFrame(records)
+
+    # In case numeric features have None, fill with defaults
+    for col in X.columns:
+        if X[col].isna().any():
+            if X[col].dtype == 'object':
+                X[col] = X[col].fillna("Unknown")
+            else:
+                X[col] = X[col].fillna(0.0)
+
+    probabilities = model.predict_proba(X)[:, 1]
+
+    results = []
+    for prob in probabilities:
+        prob_val = round(float(prob), 4)
+        prediction = bool(prob_val >= 0.5)
+        if prob_val < 0.3:
+            risk_tier = "Low"
+        elif prob_val < 0.6:
+            risk_tier = "Medium"
+        else:
+            risk_tier = "High"
+
+        results.append({
+            "churn_probability": prob_val,
+            "churn_prediction": prediction,
+            "risk_tier": risk_tier,
+        })
+
+    return {
+        "total": len(results),
+        "results": results,
     }
 
 if __name__ == "__main__":
