@@ -25,8 +25,18 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-model = joblib.load(MODEL_PATH)
-metrics = joblib.load(METRICS_PATH)
+model = None
+metrics = None
+load_error = None
+
+try:
+    model = joblib.load(MODEL_PATH)
+    metrics = joblib.load(METRICS_PATH)
+    print("Model and metrics loaded successfully.", flush=True)
+except Exception as e:
+    import traceback
+    load_error = traceback.format_exc()
+    print("ERROR loading model/metrics:\n", load_error, flush=True)
 
 
 class Customer(BaseModel):
@@ -56,16 +66,23 @@ def prepare_input(customer: Customer):
 
 @app.get("/health")
 def health():
+    if load_error:
+        return {"status": "degraded", "error": load_error}
     return {"status": "ok"}
 
 
 @app.get("/model/metadata")
 def model_metadata():
-    return metrics
+    if metrics:
+        return metrics
+    return {"error": "Metrics not loaded", "detail": load_error}
 
 
 @app.post("/predict")
 def predict(customer: Customer):
+    if model is None:
+        return {"error": "Model not loaded", "detail": load_error}
+
     X = prepare_input(customer)
 
     probability = model.predict_proba(X)[0][1]
