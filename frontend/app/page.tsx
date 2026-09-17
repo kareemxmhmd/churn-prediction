@@ -114,30 +114,15 @@ export default function Home() {
                 : "Upload customer CSV data to predict churn probabilities in bulk, filter by risk tier, and export prediction reports."}
             </p>
           </div>
-          <div className="flex flex-col items-start sm:items-end gap-2">
+          <div>
             <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white border border-gray-200 shadow-sm text-sm font-medium text-gray-700 w-fit">
               <span className={`w-2.5 h-2.5 rounded-full ${status === 'Online' ? 'bg-green-500' : 'bg-red-500 animate-pulse'}`}></span>
               API: {status}
             </div>
-
-            {/* Test CSV Download Button with Explanation */}
-            <div className="flex flex-col items-start sm:items-end mt-0.5">
-              <button
-                type="button"
-                onClick={() => downloadSampleCSV("data.csv")}
-                className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-lg bg-blue-50 hover:bg-blue-100 border border-blue-200 text-blue-700 text-xs font-semibold shadow-xs transition-colors cursor-pointer"
-              >
-                <Download className="w-3.5 h-3.5 text-blue-600" />
-                Download Test CSV (data.csv)
-              </button>
-              <span className="text-[11px] text-gray-500 mt-1 max-w-[240px] text-left sm:text-right leading-tight">
-                Pre-configured test dataset with 25 customer records to test Batch CSV Prediction.
-              </span>
-            </div>
           </div>
         </header>
 
-        {/* Tab Selection & Top Action Bar */}
+        {/* Tab Selection & Action Bar */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-gray-200 pb-3">
           <div className="flex items-center gap-2">
             <button
@@ -166,7 +151,7 @@ export default function Home() {
             </button>
           </div>
 
-          {activeTab === "single" && (
+          {activeTab === "single" ? (
             <button
               type="submit"
               form="churn-form"
@@ -184,6 +169,17 @@ export default function Home() {
               ) : (
                 "Predict Customer Churn"
               )}
+            </button>
+          ) : (
+            <button
+              type="button"
+              onClick={() => downloadSampleCSV("data.csv")}
+              className="inline-flex items-center gap-2 px-4 py-2 text-sm font-semibold rounded-lg border border-gray-300 bg-white hover:bg-gray-50 text-gray-700 shadow-sm transition-all cursor-pointer self-start sm:self-auto"
+              title="Download 25 sample customer records to test batch prediction"
+            >
+              <Download className="w-4 h-4 text-blue-600" />
+              <span>Download Test CSV</span>
+              <span className="text-xs text-gray-500 font-normal hidden sm:inline">(25 rows)</span>
             </button>
           )}
         </div>
@@ -333,26 +329,6 @@ export default function Home() {
               </div>
             </div>
             
-          </div>
-
-          <div className="flex justify-end pt-4">
-            <button
-              type="submit"
-              disabled={loading}
-              className="inline-flex items-center justify-center rounded-lg bg-blue-600 px-8 py-3.5 text-sm font-semibold text-white shadow-sm hover:bg-blue-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-            >
-              {loading ? (
-                <>
-                  <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                  </svg>
-                  Processing...
-                </>
-              ) : (
-                "Predict Customer Churn"
-              )}
-            </button>
           </div>
         </form>
 
