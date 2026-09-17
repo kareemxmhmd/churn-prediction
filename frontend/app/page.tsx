@@ -1,8 +1,11 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
+import BatchPrediction from "@/components/BatchPrediction";
+import { User, FileSpreadsheet } from "lucide-react";
 
 export default function Home() {
+  const [activeTab, setActiveTab] = useState<"single" | "batch">("single");
   const [status, setStatus] = useState("Checking backend...");
   const [prediction, setPrediction] = useState<any>(null);
   const [loading, setLoading] = useState(false);
@@ -105,7 +108,9 @@ export default function Home() {
           <div>
             <h1 className="text-3xl font-extrabold tracking-tight text-gray-900 sm:text-4xl">Customer Churn Prediction</h1>
             <p className="mt-2 text-sm text-gray-500 max-w-xl">
-              Fill out the customer profile below to predict their likelihood of churning. Our machine learning model analyzes behavioral and demographic data in real-time.
+              {activeTab === "single"
+                ? "Fill out the customer profile below to predict their likelihood of churning. Our machine learning model analyzes behavioral and demographic data in real-time."
+                : "Upload customer CSV data to predict churn probabilities in bulk, filter by risk tier, and export prediction reports."}
             </p>
           </div>
           <div>
@@ -116,9 +121,44 @@ export default function Home() {
           </div>
         </header>
 
-        <form onSubmit={handleSubmit} className="space-y-6">
-          
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        {/* Tab Selection */}
+        <div className="flex items-center gap-2 border-b border-gray-200 pb-2">
+          <button
+            type="button"
+            onClick={() => setActiveTab("single")}
+            className={`inline-flex items-center gap-2 px-4 py-2 text-sm font-semibold rounded-lg transition-all cursor-pointer ${
+              activeTab === "single"
+                ? "bg-white text-blue-700 shadow-sm border border-gray-200"
+                : "text-gray-600 hover:text-gray-900 hover:bg-gray-100"
+            }`}
+          >
+            <User className="w-4 h-4" />
+            Single Customer Form
+          </button>
+          <button
+            type="button"
+            onClick={() => setActiveTab("batch")}
+            className={`inline-flex items-center gap-2 px-4 py-2 text-sm font-semibold rounded-lg transition-all cursor-pointer ${
+              activeTab === "batch"
+                ? "bg-white text-blue-700 shadow-sm border border-gray-200"
+                : "text-gray-600 hover:text-gray-900 hover:bg-gray-100"
+            }`}
+          >
+            <FileSpreadsheet className="w-4 h-4" />
+            Batch CSV Prediction
+            <span className="ml-1 px-2 py-0.5 text-[10px] font-bold uppercase rounded-full bg-blue-100 text-blue-700">
+              New
+            </span>
+          </button>
+        </div>
+
+        {activeTab === "batch" ? (
+          <BatchPrediction apiUrl={apiUrl} />
+        ) : (
+          <>
+            <form onSubmit={handleSubmit} className="space-y-6">
+              
+              <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             
             {/* Column 1: Demographics */}
             <div className={cardStyles}>
@@ -345,7 +385,10 @@ export default function Home() {
             </div>
           </div>
         )}
+          </>
+        )}
       </div>
     </div>
   );
 }
+
