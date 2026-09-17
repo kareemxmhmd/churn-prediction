@@ -16,6 +16,7 @@ import {
   ChevronRight,
   Trash2,
   Check,
+  Sparkles,
 } from "lucide-react";
 import {
   parseCSV,
@@ -102,6 +103,40 @@ export default function BatchPrediction({ apiUrl }: BatchPredictionProps) {
     setHasPredicted(false);
     setProgress({ current: 0, total: 0 });
     if (fileInputRef.current) fileInputRef.current.value = "";
+  };
+
+  const handleLoadSampleData = async (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setError("");
+    setIsParsing(true);
+    setHasPredicted(false);
+    setCurrentPage(1);
+
+    try {
+      const res = await fetch("/data.csv");
+      if (!res.ok) throw new Error("Could not load sample data.csv");
+      const text = await res.text();
+      const { rows } = parseCSV(text);
+      if (rows.length === 0) throw new Error("Sample file is empty");
+
+      const mappedItems = rows.map((row, idx) => mapRowToCustomer(row, idx));
+      setFile(new File([text], "data.csv", { type: "text/csv" }));
+      setItems(mappedItems);
+    } catch (err: any) {
+      setError(`Failed to load sample data: ${err.message}`);
+    } finally {
+      setIsParsing(false);
+    }
+  };
+
+  const handleDownloadSampleFile = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    const link = document.createElement("a");
+    link.href = "/data.csv";
+    link.download = "data.csv";
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
   };
 
   const runBatchPredictions = async () => {
@@ -305,6 +340,28 @@ export default function BatchPrediction({ apiUrl }: BatchPredictionProps) {
               </p>
               <div className="mt-4 inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-100/60 text-blue-700 text-xs font-medium">
                 Tip: Missing columns or values will automatically use sensible defaults
+              </div>
+
+              <div className="mt-5 pt-4 border-t border-gray-200/70 flex flex-wrap items-center justify-center gap-2.5 text-xs text-gray-500">
+                <span>Want to test immediately?</span>
+                <button
+                  type="button"
+                  onClick={handleLoadSampleData}
+                  disabled={isParsing}
+                  className="inline-flex items-center gap-1.5 font-semibold text-blue-700 bg-blue-50 hover:bg-blue-100 border border-blue-200/60 px-3 py-1 rounded-md transition-colors cursor-pointer"
+                >
+                  <Sparkles className="w-3.5 h-3.5 text-blue-600" />
+                  Load Sample Data (25 rows)
+                </button>
+                <span className="text-gray-300">•</span>
+                <button
+                  type="button"
+                  onClick={handleDownloadSampleFile}
+                  className="inline-flex items-center gap-1 text-gray-500 hover:text-gray-800 underline underline-offset-2 cursor-pointer"
+                >
+                  <Download className="w-3 h-3" />
+                  data.csv
+                </button>
               </div>
             </div>
           ) : (
