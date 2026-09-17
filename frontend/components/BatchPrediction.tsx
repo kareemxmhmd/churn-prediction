@@ -21,7 +21,6 @@ import {
   parseCSV,
   mapRowToCustomer,
   exportToCSV,
-  generateSampleCSV,
   BatchItem,
   PredictionResult,
 } from "@/lib/csv-parser";
@@ -103,19 +102,6 @@ export default function BatchPrediction({ apiUrl }: BatchPredictionProps) {
     setHasPredicted(false);
     setProgress({ current: 0, total: 0 });
     if (fileInputRef.current) fileInputRef.current.value = "";
-  };
-
-  const downloadTemplate = () => {
-    const csvContent = generateSampleCSV();
-    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement("a");
-    link.href = url;
-    link.setAttribute("download", "sample_churn_prediction_template.csv");
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    URL.revokeObjectURL(url);
   };
 
   const runBatchPredictions = async () => {
@@ -271,7 +257,7 @@ export default function BatchPrediction({ apiUrl }: BatchPredictionProps) {
     <div className="space-y-6">
       {/* Upload & Template Header Card */}
       <div className="bg-white border border-gray-200 rounded-xl shadow-sm p-6 sm:p-8">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-gray-100">
+        <div className="pb-6 border-b border-gray-100">
           <div>
             <h2 className="text-xl font-bold text-gray-900 flex items-center gap-2">
               <FileSpreadsheet className="w-5 h-5 text-blue-600" />
@@ -281,14 +267,6 @@ export default function BatchPrediction({ apiUrl }: BatchPredictionProps) {
               Upload a CSV file of customer data to predict churn probabilities in bulk.
             </p>
           </div>
-          <button
-            onClick={downloadTemplate}
-            type="button"
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 shadow-sm transition-colors cursor-pointer"
-          >
-            <Download className="w-4 h-4 text-gray-500" />
-            Download Sample CSV
-          </button>
         </div>
 
         {/* Drag & Drop Area */}

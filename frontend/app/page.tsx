@@ -146,9 +146,6 @@ export default function Home() {
           >
             <FileSpreadsheet className="w-4 h-4" />
             Batch CSV Prediction
-            <span className="ml-1 px-2 py-0.5 text-[10px] font-bold uppercase rounded-full bg-blue-100 text-blue-700">
-              New
-            </span>
           </button>
         </div>
 
