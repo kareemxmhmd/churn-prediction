@@ -1,5 +1,5 @@
 import pandas as pd
-from data_loader import load_data
+from src.data_loader import load_data
 
 TARGET_COL = "Churn"
 
@@ -8,7 +8,8 @@ def build_features(df):
 
     categorical_cols = df.select_dtypes(include="object").columns.tolist()
     numeric_cols = df.select_dtypes(include=["int64", "float64"]).columns.tolist()
-    numeric_cols.remove(TARGET_COL)
+    if TARGET_COL in numeric_cols:
+        numeric_cols.remove(TARGET_COL)
 
     missing_before = df[numeric_cols].isna().sum().sum()
     print(f"Missing values before fillna: {missing_before}")
@@ -17,8 +18,6 @@ def build_features(df):
  
     missing_after = df[numeric_cols].isna().sum().sum()
     print(f"Missing values after fillna: {missing_after}")
-
-    df = pd.get_dummies(df, columns=categorical_cols)
 
     before = len(df)
     df = df.drop_duplicates()
@@ -40,4 +39,5 @@ def main():
     print(f"Target shape: {y.shape}")
     print(X.columns.tolist())
 
-main()
+if __name__ == "__main__":
+    main()
