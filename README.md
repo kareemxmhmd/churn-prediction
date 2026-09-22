@@ -1,5 +1,7 @@
 # E-Commerce Customer Churn Prediction
 
+**Live App:** [Churn-Prediction.app](https://churn-prediction-app-ta.vercel.app/)
+
 ## 1. The Problem & The Solution
 
 E-commerce businesses usually find out a customer has churned only after they've already stopped ordering, too late to do anything about it. This project predicts churn *before* it happens: given a customer's order history, engagement, and complaint record, the model outputs a churn probability.
