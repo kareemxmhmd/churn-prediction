@@ -1,7 +1,5 @@
 # E-Commerce Customer Churn Prediction
 
-> **Live Demo:** [churn-prediction-app-ta.vercel.app](https://churn-prediction-app-ta.vercel.app/)
-
 ## Business Problem
 In e-commerce, acquiring new customers costs significantly more than retaining existing ones. Most companies only discover that a customer has churned after they have stopped ordering, when win-back efforts are expensive and often unsuccessful. Identifying churn risk early is critical to protecting recurring revenue and customer lifetime value.
 
