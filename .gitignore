@@ -45,5 +45,6 @@ out/
 .DS_Store
 Thumbs.db
 
-# Data / Models
+# Data / Models / figures
 *.csv
+*.png
