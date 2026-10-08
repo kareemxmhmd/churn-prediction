@@ -1,0 +1,28 @@
+{
+  "total_test_samples": 1126,
+  "false_positives": 27,
+  "false_negatives": 21,
+  "cohort_breakdown": {
+    "Correct": {
+      "0-3 Months": 276,
+      "13-24 Months": 290,
+      "25+ Months": 86,
+      "4-12 Months": 377,
+      "Missing": 49
+    },
+    "False Negative": {
+      "0-3 Months": 5,
+      "13-24 Months": 7,
+      "25+ Months": 0,
+      "4-12 Months": 8,
+      "Missing": 1
+    },
+    "False Positive": {
+      "0-3 Months": 24,
+      "13-24 Months": 0,
+      "25+ Months": 0,
+      "4-12 Months": 2,
+      "Missing": 1
+    }
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "num__Tenure": 0.15759873390197754,
+  "num__Complain": 0.06629303842782974,
+  "cat__PreferedOrderCat_Laptop & Accessory": 0.042317360639572144,
+  "cat__PreferedOrderCat_Mobile": 0.04024552181363106,
+  "cat__PreferedOrderCat_Fashion": 0.033750176429748535,
+  "num__OrderVelocity": 0.033336903899908066,
+  "cat__MaritalStatus_Single": 0.033119477331638336,
+  "num__CityTier": 0.03273504227399826,
+  "cat__PreferredPaymentMode_Credit Card": 0.03208400681614876,
+  "num__SatisfactionScore": 0.03192558512091637,
+  "num__CashbackAmount": 0.03179343417286873,
+  "num__NumberOfAddress": 0.031168898567557335,
+  "num__InactivityRatio": 0.02962891198694706,
+  "num__DaySinceLastOrder": 0.02874181419610977,
+  "num__NumberOfDeviceRegistered": 0.025892725214362144,
+  "cat__PreferredPaymentMode_E wallet": 0.025618363171815872,
+  "cat__PreferredLoginDevice_Computer": 0.02362959273159504,
+  "num__CouponUsed": 0.02332136780023575,
+  "num__WarehouseToHome": 0.02081122249364853,
+  "cat__MaritalStatus_Married": 0.0204805675894022
+}
